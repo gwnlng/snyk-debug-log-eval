@@ -110,11 +110,11 @@ def analyze(lines):
         "api": find_value(lines, "main - API:", prefer_non_redacted=True),
         "region": find_value(lines, "main - Region:", prefer_non_redacted=True),
         "duration_sec": duration_sec,
-        "manifest_count": manifest_count,
-        "manifest_files": manifest_files,
+        "scanned_manifest_count": manifest_count,
+        "scanned_manifest_files": manifest_files,
         "scanned_projects": scanned_projects,
         "unscanned_manifest_count": unscanned,
-        "unscanned_manifest": unscanned_manifest,
+        "unscanned_manifest_files": unscanned_manifest,
         "scan_status": scan_status,
     }
 

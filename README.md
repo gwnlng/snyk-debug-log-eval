@@ -75,9 +75,9 @@ Paths are deduplicated and kept in first-seen order — the same manifest can fa
 more than once in a single log. Redactions *inside* a path (e.g.
 `src/main/re***s/...`) are left as-is, since the original text is unrecoverable.
 
-### Skipped manifests & scan status
+### Unscanned manifests & scan status
 
-When `unscanned_manifest` is non-empty, `unscanned_manifest_count` is its length —
+When `unscanned_manifest_files` is non-empty, `unscanned_manifest_count` is its length —
 the manifests the CLI explicitly named as failures. Otherwise it falls back to the
 absolute difference between the number of detected manifests and the number of
 `scannedProjects` reported by the CLI:
@@ -115,14 +115,14 @@ directory.
   "api": "https://api.snyk.io",
   "region": "snyk-us-01",
   "duration_sec": 4.77,
-  "manifest_count": 2,
-  "manifest_files": [
+  "scanned_manifest_count": 2,
+  "scanned_manifest_files": [
     "package-lock.json",
     "requirements.txt"
   ],
   "scanned_projects": 2,
   "unscanned_manifest_count": 1,
-  "unscanned_manifest": [
+  "unscanned_manifest_files": [
     "pom.xml"
   ],
   "scan_status": "incomplete"
