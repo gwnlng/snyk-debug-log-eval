@@ -51,22 +51,24 @@ def parse_manifests(lines):
 def parse_unscanned_manifests(lines):
     """Collect manifests the CLI failed to resolve dependencies for.
 
-    Each failure is reported as `✗ Failed to get dependencies for <path>` followed
-    by an `ERROR:` line explaining why (missing node_modules, unbuildable Maven
-    dependency tree, ...). Every such line counts regardless of the reason. The
-    line may be wrapped in ANSI colour codes and the path is usually prefixed with
-    a `***/` redaction of the working directory, both of which are stripped.
+    Each failure is reported on its own line as `✗ Failed to get dependencies for
+    <path>`, possibly wrapped in ANSI colour codes, with the path usually prefixed
+    by a `***/` redaction of the working directory. The marker is anchored to the
+    start of the line (after stripping ANSI codes and whitespace) so it doesn't
+    match the same phrase echoed inside JSON telemetry blobs, stack traces, or the
+    generic no-path summary line (`Failed to get dependencies for all N potential
+    projects.`) that the CLI also prints.
 
     Returns the paths in first-seen order, deduplicated (possibly empty).
     """
-    marker = "Failed to get dependencies for "
+    marker = "✗ Failed to get dependencies for "
     files = []
     seen = set()
     for line in lines:
-        idx = line.find(marker)
-        if idx == -1:
+        clean = ANSI_RE.sub("", line).lstrip()
+        if not clean.startswith(marker):
             continue
-        value = ANSI_RE.sub("", line[idx + len(marker):]).strip()
+        value = clean[len(marker):].strip()
         if value.startswith("***/"):
             value = value[len("***/"):]
         if value and value not in seen:
